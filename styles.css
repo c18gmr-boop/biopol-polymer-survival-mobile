@@ -299,6 +299,7 @@ select {
   min-width: 0;
   width: 100%;
   margin: 0 auto;
+  align-self: start;
   border-radius: 20px;
   overflow: hidden;
   border: 1px solid var(--line-strong);
@@ -390,6 +391,13 @@ body.mobile-body.play-mode .touch-note {
 
 body.mobile-body.play-mode .turn-button {
   min-height: 60px;
+}
+
+@media (orientation: portrait) and (max-width: 768px) {
+  body.mobile-body.play-mode .game-panel {
+    grid-template-rows: auto auto auto;
+    align-content: start;
+  }
 }
 
 .setup-panel summary {
