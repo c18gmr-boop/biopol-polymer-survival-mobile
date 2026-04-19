@@ -297,6 +297,7 @@
     touchSurface.addEventListener("touchend", onTouchEnd, { passive: false });
     touchSurface.addEventListener("touchcancel", onTouchCancel, { passive: false });
     canvas.addEventListener("pointerdown", ensureAudio, { passive: true });
+    canvas.addEventListener("click", onArenaClick);
     bindTurnButton(turnLeftButton, "left");
     bindTurnButton(turnRightButton, "right");
 
@@ -479,6 +480,15 @@
       event.preventDefault();
     }
     state.touchStart = null;
+  }
+
+  function onArenaClick(event) {
+    if (state.status !== "paused") {
+      return;
+    }
+
+    event.preventDefault();
+    togglePause();
   }
 
   function bindTurnButton(button, side) {
@@ -715,7 +725,7 @@
     if (state.status === "running" || state.status === "countdown") {
       state.status = "paused";
       overlayChip.textContent = "Paused";
-      updateStatus("Reaction paused. Hit pause again or press Space to resume.");
+      updateStatus("Reaction paused. Tap the arena, or use Pause / Space to resume.");
       playTone(280, 0.12, "sawtooth", 0.02, 180);
     }
   }
@@ -1152,7 +1162,7 @@
       ctx.fillText("PAUSED", centerX, centerY);
       ctx.font = "20px Menlo";
       ctx.fillStyle = "#93c7b0";
-      ctx.fillText("Press Space or Pause to resume", centerX, centerY + 40);
+      ctx.fillText("Tap the arena or use Pause / Space", centerX, centerY + 40);
     } else if (state.status === "round-over") {
       ctx.fillText(state.winner ? `${state.winner.label} survives` : "Cycle terminated", centerX, centerY);
       ctx.font = "20px Menlo";
