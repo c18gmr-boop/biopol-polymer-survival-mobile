@@ -735,14 +735,16 @@
       || state.status === "running"
       || state.status === "paused"
       || state.status === "round-over";
+    const pausedScroll = state.status === "paused";
 
     if (nextPlayMode === isPlayMode) {
+      document.body.classList.toggle("paused-scroll", pausedScroll);
       return;
     }
 
     isPlayMode = nextPlayMode;
     document.body.classList.toggle("play-mode", nextPlayMode);
-    document.body.classList.toggle("paused-scroll", state.status === "paused");
+    document.body.classList.toggle("paused-scroll", pausedScroll);
 
     if (nextPlayMode) {
       window.scrollTo({ top: 0, left: 0, behavior: "auto" });
