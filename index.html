@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>Biopol Chain Reaction Mobile</title>
+    <link rel="icon" href="./assets/biopol_logo.png" />
+    <link rel="apple-touch-icon" href="./assets/biopol_logo.png" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="mobile-body">
+    <div class="mobile-shell">
+      <header class="panel hero-panel">
+        <div class="hero-copy">
+          <p class="eyebrow">Biopol mobile reaction lab</p>
+          <h1>Turn fast. Stay alive. Keep the chamber under control.</h1>
+        </div>
+        <div class="hero-chip-row">
+          <span class="hero-chip">
+            <span class="hero-chip-label">Reactor</span>
+            <strong id="hero-arena">Open Reactor</strong>
+          </span>
+          <span class="hero-chip">
+            <span class="hero-chip-label">Status</span>
+            <strong id="hero-status">Ready to polymerize</strong>
+          </span>
+        </div>
+      </header>
+
+      <section class="panel toolbar-panel">
+        <div class="toolbar-grid">
+          <label class="mini-field">
+            <span>Reactor</span>
+            <select id="arena-select">
+              <option value="blank" selected>Open Reactor</option>
+              <option value="circuit">Catalyst Lattice</option>
+              <option value="crossfire">Crosslink Grid</option>
+              <option value="gauntlet">Flow Reactor</option>
+            </select>
+          </label>
+
+          <label class="mini-field">
+            <span>Score</span>
+            <select id="target-select">
+              <option value="3" selected>3 points</option>
+              <option value="5">5 points</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="action-row">
+          <button id="start-match" class="primary-button">Start</button>
+          <button id="pause-match" class="secondary-button">Pause</button>
+          <button id="restart-round" class="secondary-button">Restart</button>
+        </div>
+      </section>
+
+      <section class="score-strip" aria-label="Scores">
+        <div id="scoreboard" class="scoreboard"></div>
+      </section>
+
+      <main class="panel game-panel">
+        <div class="game-head">
+          <span id="overlay-chip" class="overlay-chip">Awaiting initiation</span>
+          <span id="round-chip" class="overlay-chip muted">Target 3</span>
+        </div>
+
+        <div class="canvas-shell">
+          <canvas id="arena" width="1120" height="672" aria-label="Biopol polymer reactor"></canvas>
+        </div>
+
+        <div class="touch-controls" aria-label="Touch controls">
+          <button id="turn-left" class="turn-button" type="button">Turn left</button>
+          <button id="turn-right" class="turn-button" type="button">Turn right</button>
+        </div>
+
+        <p class="touch-note">Swipe on the arena or tap the turn pads. The arena locks scrolling while you play.</p>
+      </main>
+
+      <details class="panel setup-panel" open>
+        <summary>Chain setup</summary>
+        <p class="config-note">
+          Keep chain one on manual for the local player. On touch devices the other primary slots default to auto or off so the match stays readable.
+        </p>
+        <div id="player-config" class="player-config"></div>
+      </details>
+
+      <footer class="panel footer-panel">
+        <p class="status-label">Reaction feed</p>
+        <p id="status-text" class="status-text">
+          Start a reaction, then steer chain one with the turn pads or a swipe on the arena.
+        </p>
+      </footer>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
