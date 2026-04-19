@@ -500,6 +500,10 @@
       startMatch();
     }
 
+    if (state.status === "paused") {
+      return;
+    }
+
     const player = getPrimaryHumanPlayer();
     if (!player) {
       return;

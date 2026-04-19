@@ -371,6 +371,9 @@ body.mobile-body.play-mode .footer-panel {
 }
 
 body.mobile-body.play-mode .toolbar-panel {
+  position: sticky;
+  top: calc(8px + env(safe-area-inset-top));
+  z-index: 6;
   padding: 10px 12px;
 }
 
