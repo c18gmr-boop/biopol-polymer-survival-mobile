@@ -475,7 +475,6 @@
     };
 
     button.addEventListener("pointerdown", onPress);
-    button.addEventListener("click", onPress);
   }
 
   function handleRelativeTurn(side) {
@@ -592,28 +591,37 @@
   function createRoundPlayers(configuredSlots) {
     const centerColumn = Math.floor(COLS / 2);
     const centerRow = Math.floor(ROWS / 2);
-    const edgeInset = 1;
-    const topRow = edgeInset;
-    const bottomRow = ROWS - 1 - edgeInset;
-    const leftColumn = edgeInset;
-    const rightColumn = COLS - 1 - edgeInset;
-    const spawnPoints = [
-      { x: 14, y: topRow, direction: "down" },
-      { x: centerColumn, y: topRow, direction: "down" },
-      { x: COLS - 15, y: topRow, direction: "down" },
-      { x: rightColumn, y: 14, direction: "left" },
-      { x: rightColumn, y: centerRow, direction: "left" },
-      { x: rightColumn, y: ROWS - 15, direction: "left" },
-      { x: COLS - 15, y: bottomRow, direction: "up" },
-      { x: centerColumn, y: bottomRow, direction: "up" },
-      { x: 14, y: bottomRow, direction: "up" },
-      { x: leftColumn, y: ROWS - 15, direction: "right" },
-      { x: leftColumn, y: centerRow, direction: "right" },
-      { x: leftColumn, y: 14, direction: "right" },
+    const cornerInsetX = 14;
+    const cornerInsetY = 14;
+    const topRow = cornerInsetY;
+    const bottomRow = ROWS - 1 - cornerInsetY;
+    const leftColumn = cornerInsetX;
+    const rightColumn = COLS - 1 - cornerInsetX;
+    const sideOffsetX = 20;
+    const sideOffsetY = 12;
+    const spawnBySlot = {
+      1: { x: leftColumn, y: topRow, direction: "down" },
+      2: { x: rightColumn, y: bottomRow, direction: "up" },
+      3: { x: rightColumn, y: topRow, direction: "down" },
+      4: { x: leftColumn, y: bottomRow, direction: "up" },
+      5: { x: centerColumn, y: topRow, direction: "down" },
+      6: { x: centerColumn, y: bottomRow, direction: "up" },
+      7: { x: leftColumn, y: centerRow, direction: "right" },
+      8: { x: rightColumn, y: centerRow, direction: "left" },
+      9: { x: centerColumn - sideOffsetX, y: topRow, direction: "down" },
+      10: { x: rightColumn, y: centerRow - sideOffsetY, direction: "left" },
+      11: { x: centerColumn + sideOffsetX, y: bottomRow, direction: "up" },
+      12: { x: leftColumn, y: centerRow + sideOffsetY, direction: "right" },
+    };
+    const fallbackSpawns = [
+      { x: centerColumn + sideOffsetX, y: topRow, direction: "down" },
+      { x: rightColumn, y: centerRow + sideOffsetY, direction: "left" },
+      { x: centerColumn - sideOffsetX, y: bottomRow, direction: "up" },
+      { x: leftColumn, y: centerRow - sideOffsetY, direction: "right" },
     ];
 
     return configuredSlots.map((slot, index) => {
-      const spawn = spawnPoints[index % spawnPoints.length];
+      const spawn = spawnBySlot[slot.slot] || fallbackSpawns[index % fallbackSpawns.length];
       const player = {
         ...slot,
         x: spawn.x,
