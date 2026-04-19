@@ -411,6 +411,11 @@
   }
 
   function onTouchStart(event) {
+    if (state.status === "paused") {
+      state.touchStart = null;
+      return;
+    }
+
     event.preventDefault();
     const touch = event.changedTouches[0];
     if (!touch) {
@@ -420,6 +425,11 @@
   }
 
   function onTouchMove(event) {
+    if (state.status === "paused") {
+      state.touchStart = null;
+      return;
+    }
+
     if (!state.touchStart) {
       return;
     }
@@ -428,6 +438,11 @@
   }
 
   function onTouchEnd(event) {
+    if (state.status === "paused") {
+      state.touchStart = null;
+      return;
+    }
+
     event.preventDefault();
     const touch = event.changedTouches[0];
     if (!touch || !state.touchStart) {
@@ -460,7 +475,9 @@
   }
 
   function onTouchCancel(event) {
-    event.preventDefault();
+    if (state.status !== "paused") {
+      event.preventDefault();
+    }
     state.touchStart = null;
   }
 
@@ -725,6 +742,7 @@
 
     isPlayMode = nextPlayMode;
     document.body.classList.toggle("play-mode", nextPlayMode);
+    document.body.classList.toggle("paused-scroll", state.status === "paused");
 
     if (nextPlayMode) {
       window.scrollTo({ top: 0, left: 0, behavior: "auto" });

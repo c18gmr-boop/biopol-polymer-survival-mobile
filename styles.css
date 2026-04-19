@@ -351,9 +351,17 @@ body.mobile-body.play-mode {
   overflow: hidden;
 }
 
+body.mobile-body.play-mode.paused-scroll {
+  overflow: auto;
+}
+
 body.mobile-body.play-mode .mobile-shell {
   grid-template-rows: auto auto minmax(0, 1fr);
   min-height: 100dvh;
+}
+
+body.mobile-body.play-mode.paused-scroll .mobile-shell {
+  min-height: auto;
 }
 
 body.mobile-body.play-mode .hero-panel,
@@ -391,6 +399,10 @@ body.mobile-body.play-mode .touch-note {
 
 body.mobile-body.play-mode .turn-button {
   min-height: 60px;
+}
+
+body.mobile-body.play-mode.paused-scroll .canvas-shell {
+  touch-action: pan-x pan-y;
 }
 
 @media (orientation: portrait) and (max-width: 768px) {
