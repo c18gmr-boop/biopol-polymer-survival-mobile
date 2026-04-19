@@ -405,6 +405,42 @@ body.mobile-body.play-mode.paused-scroll .canvas-shell {
   touch-action: pan-x pan-y;
 }
 
+@media (pointer: coarse) {
+  body.mobile-body.play-mode .toolbar-grid {
+    display: none;
+  }
+
+  body.mobile-body.play-mode .action-row {
+    margin-top: 0;
+  }
+
+  body.mobile-body.play-mode .score-card {
+    flex-basis: 110px;
+    gap: 3px;
+    padding: 6px 8px;
+  }
+
+  body.mobile-body.play-mode .score-card small,
+  body.mobile-body.play-mode .effect-strip {
+    display: none;
+  }
+
+  body.mobile-body.play-mode .game-panel {
+    gap: 6px;
+    padding: 8px;
+  }
+
+  body.mobile-body.play-mode .touch-controls {
+    gap: 8px;
+  }
+
+  body.mobile-body.play-mode .turn-button {
+    min-height: 52px;
+    padding: 8px 10px;
+    font-size: 0.95rem;
+  }
+}
+
 @media (orientation: portrait) and (max-width: 768px) {
   body.mobile-body.play-mode .game-panel {
     grid-template-rows: auto auto auto;

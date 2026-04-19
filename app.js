@@ -413,7 +413,10 @@
 
   function onTouchStart(event) {
     if (state.status === "paused") {
-      state.touchStart = null;
+      const touch = event.changedTouches[0];
+      if (touch) {
+        state.touchStart = { x: touch.clientX, y: touch.clientY };
+      }
       return;
     }
 
@@ -427,7 +430,6 @@
 
   function onTouchMove(event) {
     if (state.status === "paused") {
-      state.touchStart = null;
       return;
     }
 
@@ -439,12 +441,6 @@
   }
 
   function onTouchEnd(event) {
-    if (state.status === "paused") {
-      state.touchStart = null;
-      return;
-    }
-
-    event.preventDefault();
     const touch = event.changedTouches[0];
     if (!touch || !state.touchStart) {
       return;
@@ -454,7 +450,20 @@
     const dy = touch.clientY - state.touchStart.y;
     state.touchStart = null;
 
+    if (state.status === "paused") {
+      if (Math.max(Math.abs(dx), Math.abs(dy)) < TOUCH_SWIPE_MIN && handleArenaTap(touch.clientX, touch.clientY)) {
+        event.preventDefault();
+        ensureAudio();
+      }
+      return;
+    }
+
+    event.preventDefault();
+
     if (Math.max(Math.abs(dx), Math.abs(dy)) < TOUCH_SWIPE_MIN) {
+      if (handleArenaTap(touch.clientX, touch.clientY)) {
+        ensureAudio();
+      }
       return;
     }
 
@@ -483,12 +492,44 @@
   }
 
   function onArenaClick(event) {
-    if (state.status !== "paused") {
-      return;
+    if (handleArenaTap(event.clientX, event.clientY)) {
+      event.preventDefault();
+    }
+  }
+
+  function handleArenaTap(clientX, clientY) {
+    const tapSide = getArenaTapSide(clientX, clientY);
+    if (!tapSide) {
+      return false;
     }
 
-    event.preventDefault();
-    togglePause();
+    if (state.status === "paused") {
+      togglePause();
+      return true;
+    }
+
+    if (state.status !== "running" && state.status !== "countdown") {
+      return false;
+    }
+
+    const player = getPrimaryHumanPlayer();
+    if (!player) {
+      return false;
+    }
+
+    handleRelativeTurn(tapSide);
+    return true;
+  }
+
+  function getArenaTapSide(clientX, clientY) {
+    const bounds = canvas.getBoundingClientRect();
+    const insideX = clientX >= bounds.left && clientX <= bounds.right;
+    const insideY = clientY >= bounds.top && clientY <= bounds.bottom;
+    if (!insideX || !insideY) {
+      return null;
+    }
+
+    return clientX < bounds.left + bounds.width / 2 ? "left" : "right";
   }
 
   function bindTurnButton(button, side) {
@@ -1151,7 +1192,7 @@
       ctx.fillText(`BIOPOL CHAIN REACTION // ${arenaLabel}`, centerX, centerY);
       ctx.font = "20px Menlo";
       ctx.fillStyle = "#93c7b0";
-      ctx.fillText("Tap Start or use the turn pads", centerX, centerY + 40);
+      ctx.fillText("Tap arena left / right or use the turn pads", centerX, centerY + 40);
     } else if (state.status === "countdown") {
       const count = Math.max(1, Math.ceil(state.countdownRemaining / 1000));
       ctx.fillText(String(count), centerX, centerY);
