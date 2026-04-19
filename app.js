@@ -591,12 +591,11 @@
   function createRoundPlayers(configuredSlots) {
     const centerColumn = Math.floor(COLS / 2);
     const centerRow = Math.floor(ROWS / 2);
-    const cornerInsetX = 14;
-    const cornerInsetY = 14;
-    const topRow = cornerInsetY;
-    const bottomRow = ROWS - 1 - cornerInsetY;
-    const leftColumn = cornerInsetX;
-    const rightColumn = COLS - 1 - cornerInsetX;
+    const edgeLane = 1;
+    const topRow = edgeLane;
+    const bottomRow = ROWS - 1 - edgeLane;
+    const leftColumn = edgeLane;
+    const rightColumn = COLS - 1 - edgeLane;
     const sideOffsetX = 20;
     const sideOffsetY = 12;
     const spawnBySlot = {
@@ -913,7 +912,7 @@
   }
 
   function scoreEdgeUsage(currentX, currentY, nextX, nextY, safeDistance, escapeDistance) {
-    if (safeDistance < 5) {
+    if (safeDistance < 4) {
       return 0;
     }
 
@@ -921,11 +920,15 @@
     const nextEdgeDistance = distanceToNearestEdge(nextX, nextY);
     const movingTowardEdge = Math.max(0, currentEdgeDistance - nextEdgeDistance);
     const perimeterLaneBonus =
-      nextEdgeDistance <= 5 && escapeDistance >= 3
-        ? (6 - nextEdgeDistance) * 0.45
+      nextEdgeDistance <= 4 && escapeDistance >= 2
+        ? (5 - nextEdgeDistance) * 0.85
+        : 0;
+    const edgeHoldBonus =
+      currentEdgeDistance <= 2 && nextEdgeDistance <= 2 && safeDistance >= 6
+        ? 1.4
         : 0;
 
-    return movingTowardEdge * 1.1 + perimeterLaneBonus;
+    return movingTowardEdge * 1.5 + perimeterLaneBonus + edgeHoldBonus;
   }
 
   function distanceToNearestEdge(x, y) {
